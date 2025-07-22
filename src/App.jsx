@@ -27,9 +27,9 @@ function App() {
       });
 
     Promise.all([
-      cargarCSV("/precios-alimentos/public/datasets/inflacion_mensual.csv"),
-      cargarCSV("/precios-alimentos/public/datasets/dolar_oficial/dolar_oficial_promedio_mensual.csv"),
-      cargarCSV("/precios-alimentos/public/datasets/dolar_blue/dolar_blue_avg_mensual.csv"),
+      cargarCSV(import.meta.env.BASE_URL + "datasets/inflacion_mensual.csv"),
+      cargarCSV(import.meta.env.BASE_URL + "datasets/dolar_oficial/dolar_oficial_promedio_mensual.csv"),
+      cargarCSV(import.meta.env.BASE_URL + "datasets/dolar_blue/dolar_blue_avg_mensual.csv"),
     ]).then(([inflacionData, oficialData, blueData]) => {
       const combinado = inflacionData.map((fila, i) => ({
         mes: fila.mes,
