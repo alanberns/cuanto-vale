@@ -11,6 +11,12 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 
+import GraficoBoleto from "./GraficoBoleto";
+import CalculadorPoderAdquisitivo from "./CalculadorPoderAdquisitivo";
+import CalculadorBoletos from "./CalculadorBoletos";
+import CalculadorSueldoDolar from "./CalculadorSueldoDolar";
+import ComparadorDolares from "./ComparadorDolares";
+
 ChartJS.register(LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 function App() {
@@ -57,22 +63,22 @@ function App() {
     labels,
     datasets: [
       {
-        label: "Dólar Oficial",
-        data: oficial,
+        label: "Dólar Blue",
+        data: blue,
         borderColor: "#3b82f6",
         backgroundColor: "#3b82f680",
         tension: 0.3,
       },
       {
-        label: "Dólar Blue",
-        data: blue,
+        label: "Inflación Acumulada",
+        data: inflacion,
         borderColor: "#ef4444",
         backgroundColor: "#ef444480",
         tension: 0.3,
       },
       {
-        label: "Inflación Acumulada",
-        data: inflacion,
+        label: "Dólar Oficial",
+        data: oficial,
         borderColor: "#10b981",
         backgroundColor: "#10b98180",
         tension: 0.3,
@@ -95,6 +101,11 @@ function App() {
     <div className="bg-white p-6 rounded-xl shadow max-w-4xl mx-auto">
       <h2 className="text-xl font-bold mb-4 text-gray-700">📊 Evolución económica</h2>
       <Line data={data} options={options} />
+      <GraficoBoleto/>
+      <CalculadorPoderAdquisitivo/>
+      <CalculadorBoletos/>
+      <CalculadorSueldoDolar />
+      <ComparadorDolares />
     </div>
   );
 }
