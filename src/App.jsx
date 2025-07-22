@@ -33,9 +33,9 @@ function App() {
     ]).then(([inflacionData, oficialData, blueData]) => {
       const combinado = inflacionData.map((fila, i) => ({
         mes: fila.mes,
-        inflacion: parseFloat(fila.inflacion),
-        dolar: parseFloat(oficialData[i]?.dolar || 0),
-        dolar_blue: parseFloat(blueData[i]?.dolar_blue || 0),
+        inflacion: fila.inflacion ? parseFloat(fila.inflacion) : null,
+        dolar: oficialData[i]?.dolar ? parseFloat(oficialData[i].dolar) : null,
+        dolar_blue: blueData[i]?.dolar_blue ? parseFloat(blueData[i].dolar_blue) : null,
       }));
       setEconomia(combinado);
     });
