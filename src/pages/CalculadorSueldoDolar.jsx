@@ -145,7 +145,7 @@ export default function CalculadorSueldoDolar() {
               <div className="font-bold text-xl px-4 py-2 rounded-lg">${resultado.sueldoReducido}</div>
             </div>
             <div className="bg-white p-4 rounded-lg shadow-sm flex items-center justify-between">
-              <p>🧮 Sueldo en dólares en {formatearMes(fechaBase)}</p>
+              <p>💰 Sueldo en dólares en {formatearMes(fechaBase)}</p>
               <div className="font-bold text-xl px-4 py-2 rounded-lg whitespace-nowrap">USD {resultado.sueldoDolarHistorico}</div>
             </div>
             <div className="bg-white p-4 rounded-lg shadow-sm flex items-center justify-between">

@@ -139,7 +139,7 @@ export default function ComparadorDolares() {
           <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-700">
             {[
               { label: `📅 Dólar en ${formatearMes(fechaCompra)}`, value: `$${resultado.valorPasado}` },
-              { label: `📅 Dólar actual`, value: `$${resultado.valorActual} (${resultado.variacion}%)`, nowrap: true },
+              { label: `💵 Dólar actual`, value: `$${resultado.valorActual} (${resultado.variacion}%)`, nowrap: true },
               { label: `💸 Inversión inicial en pesos`, value: `$${resultado.inversionPasada}` },
               { label: `💰 Valor actual de esos dólares`, value: `$${resultado.valorHoy}` },
               {
@@ -151,7 +151,7 @@ export default function ComparadorDolares() {
               { label: `📈 Inflación acumulada desde ${formatearMes(fechaCompra)}`, value: `${resultado.inflacion}%` },
               { label: `🎯 Valor ajustado por inflación`, value: `$${resultado.inversionAjustada}` },
               {
-                label: `🧮 Diferencia respecto al ajuste`,
+                label: `💵 Diferencia respecto al ajuste`,
                 value: `$${resultado.diferencialVsInflacion} (${resultado.diferencialPorcentaje}%)`,
                 color: resultado.diferencialVsInflacion < 0 ? "text-red-600" : "text-green-600",
                 nowrap: true,
