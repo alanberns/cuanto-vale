@@ -8,7 +8,7 @@ export default function MenuPrincipal({ onSelect }) {
       },
       {
         id: "sueldoDolares",
-        titulo: "Dólares",
+        titulo: "Mi sueldo en dólares",
         descripcion: "Convertí tu sueldo a dólares y compará con el pasado.",
         icono: "💵",
       },
