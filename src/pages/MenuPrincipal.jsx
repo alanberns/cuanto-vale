@@ -56,6 +56,25 @@ export default function MenuPrincipal({ onSelect }) {
             </button>
           ))}
         </div>
+
+        <div className="mt-12 text-xs text-gray-500 text-center max-w-2xl mx-auto leading-relaxed">
+  <p>
+    Los valores de dólar utilizados corresponden al <strong>promedio mensual del dólar</strong>.
+  </p>
+  <p>
+    Los datos de inflación provienen del <strong>INDEC</strong> 
+  </p>
+  <p>
+    Datos disponibles desde Enero 2009.
+  </p>
+  <p>
+    Los cálculos no constituyen asesoramiento financiero. Son estimaciones basadas en datos públicos y pueden variar según la fuente o el método de cálculo.
+  </p>
+  <p>
+    Fuentes: <a href="https://www.investing.com" target="_blank" rel="noopener noreferrer" className="underline">investing.com</a> - <a href="https://datos.gob.ar" target="_blank" rel="noopener noreferrer" className="underline">datos.gob.ar</a> - <a href="https://indec.gob.ar" target="_blank" rel="noopener noreferrer" className="underline">indec.gob.ar</a>.
+  </p>
+</div>
+
       </div>
     );
   }
