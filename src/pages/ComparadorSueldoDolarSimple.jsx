@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import Papa from "papaparse";
+import { formatearMes, esFechaValida, limitesFecha } from "../utils/fechas";
+
 
 export default function ComparadorSueldoDolarSimple() {
   const [dolarData, setDolarData] = useState([]);
@@ -7,6 +9,7 @@ export default function ComparadorSueldoDolarSimple() {
   const [sueldoBase, setSueldoBase] = useState(50000);
   const [sueldoActual, setSueldoActual] = useState(900000);
   const [resultado, setResultado] = useState(null);
+  const [errorFecha, setErrorFecha] = useState("");
 
   useEffect(() => {
     Papa.parse(import.meta.env.BASE_URL + "datasets/dolar_blue/dolar_blue_avg_mensual.csv", {
@@ -27,6 +30,12 @@ export default function ComparadorSueldoDolarSimple() {
     const valorBase = dolarData.find((d) => d.mes === fechaBase)?.dolar_blue;
     const valorActual = dolarData[dolarData.length - 1]?.dolar_blue;
 
+    if (!valorBase || !valorActual || !esFechaValida(fechaBase)) {
+      setErrorFecha("La fecha seleccionada está fuera del rango disponible (2009 a junio 2025).");
+      setResultado(null); 
+      return;
+    }
+    setErrorFecha("");     
     if (!valorBase || !valorActual) return;
 
     const sueldoDolarBase = sueldoBase / valorBase;
@@ -58,10 +67,15 @@ export default function ComparadorSueldoDolarSimple() {
           <label className="text-sm font-medium text-gray-700 mb-2 block">Mes-año a comparar</label>
           <input
             type="month"
+            min={limitesFecha.min}
+            max={limitesFecha.max}
             value={fechaBase}
             onChange={(e) => setFechaBase(e.target.value)}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
           />
+          {errorFecha && (
+            <p className="text-red-600 text-sm mt-2 text-center sm:text-left">{errorFecha}</p>
+          )}
         </div>
         <div>
           <label className="text-sm font-medium text-gray-700 mb-2 block">Sueldo en ese mes ($)</label>
@@ -98,7 +112,7 @@ export default function ComparadorSueldoDolarSimple() {
         <>
           <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-700">
             <div className="bg-white p-4 rounded-lg shadow-sm flex items-center justify-between">
-              <p>📅 Dólar en {fechaBase}</p>
+              <p>📅 Dólar en {formatearMes(fechaBase)}</p>
               <div className="font-bold text-xl px-4 py-2 rounded-lg">${resultado.valorBase}</div>
             </div>
             <div className="bg-white p-4 rounded-lg shadow-sm flex items-center justify-between">
@@ -106,7 +120,7 @@ export default function ComparadorSueldoDolarSimple() {
               <div className="font-bold text-xl px-4 py-2 rounded-lg">${resultado.valorActual}</div>
             </div>
             <div className="bg-white p-4 rounded-lg shadow-sm flex items-center justify-between">
-              <p>🧮 Sueldo en dólares en {fechaBase}</p>
+              <p>💵 Sueldo en dólares en {formatearMes(fechaBase)}</p>
               <div className="font-bold text-xl px-4 py-2 rounded-lg whitespace-nowrap">USD {resultado.sueldoDolarBase}</div>
             </div>
             <div className="bg-white p-4 rounded-lg shadow-sm flex items-center justify-between">
@@ -123,8 +137,8 @@ export default function ComparadorSueldoDolarSimple() {
               }`}
             >
               {resultado.diferenciaPorcentaje < 0
-                ? `Tu sueldo en dólares cayó respecto a ${fechaBase}: ganás ${Math.abs(resultado.diferenciaPorcentaje)}% menos.`
-                : `Tu sueldo en dólares mejoró respecto a ${fechaBase}: ganás ${resultado.diferenciaPorcentaje}% más.`}
+                ? `Tu sueldo en dólares cayó respecto a ${formatearMes(fechaBase)}: ganás ${Math.abs(resultado.diferenciaPorcentaje)}% menos.`
+                : `Tu sueldo en dólares mejoró respecto a ${formatearMes(fechaBase)}: ganás ${resultado.diferenciaPorcentaje}% más.`}
             </div>
           </div>
         </>

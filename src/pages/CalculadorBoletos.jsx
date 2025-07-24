@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Papa from "papaparse";
+import { formatearMes, esFechaValida, limitesFecha } from "../utils/fechas";
 
 export default function CalculadorBoletos() {
   const [inflacionData, setInflacionData] = useState([]);
@@ -8,6 +9,8 @@ export default function CalculadorBoletos() {
   const [sueldoBase, setSueldoBase] = useState(100000);
   const [sueldoActual, setSueldoActual] = useState(180000);
   const [resultado, setResultado] = useState(null);
+  const [errorFecha, setErrorFecha] = useState("");
+
 
   useEffect(() => {
     Papa.parse(import.meta.env.BASE_URL + "datasets/inflacion_mensual.csv", {
@@ -44,6 +47,13 @@ export default function CalculadorBoletos() {
   const calcular = () => {
     const desdeIndex = inflacionData.findIndex((d) => d.mes === fechaBase);
     const hastaIndex = inflacionData.length - 1;
+
+    if (!esFechaValida(fechaBase)) {
+      setErrorFecha("La fecha seleccionada está fuera del rango disponible (2009 a junio 2025).");
+      setResultado(null); 
+      return;
+    }
+    setErrorFecha("");
 
     const inflacionAcumulada =
       inflacionData
@@ -96,10 +106,15 @@ export default function CalculadorBoletos() {
           <label className="text-sm font-medium text-gray-700 mb-2 block">Mes-año a comparar</label>
           <input
             type="month"
+            min={limitesFecha.min}
+            max={limitesFecha.max}
             value={fechaBase}
             onChange={(e) => setFechaBase(e.target.value)}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400"
           />
+          {errorFecha && (
+            <p className="text-red-600 text-sm mt-2 text-center sm:text-left">{errorFecha}</p>
+          )}
         </div>
         <div>
           <label className="text-sm font-medium text-gray-700 mb-2 block">Sueldo en esa fecha ($)</label>
@@ -135,13 +150,13 @@ export default function CalculadorBoletos() {
           <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-700">
             {/* Inflación */}
             <div className="bg-white p-4 rounded-lg shadow-sm flex items-center justify-between">
-              <p>📈 Inflación acumulada desde <strong>{fechaBase}</strong></p>
+              <p>📈 Inflación acumulada desde {formatearMes(fechaBase)}</p>
               <div className="font-bold text-xl px-4 py-2 rounded-lg">{resultado.inflacion}%</div>
             </div>
 
             {/* Boleto base */}
             <div className="bg-white p-4 rounded-lg shadow-sm flex items-center justify-between">
-              <p>🎟️ Valor del boleto en {fechaBase}</p>
+              <p>🎟️ Valor del boleto en {formatearMes(fechaBase)}</p>
               <div className="font-bold text-xl px-4 py-2 rounded-lg">${resultado.boletoBase}</div>
             </div>
 
@@ -190,7 +205,7 @@ export default function CalculadorBoletos() {
               className={`rounded-xl px-6 py-4 text-white text-center font-semibold text-lg shadow-md ${resultado.deterioroVsAntes < 0 ? "bg-red-600" : "bg-green-700"
                 }`}
             >
-              En comparación con el pasado, tu capacidad de compra cambió en {Math.abs(resultado.deterioroVsAntes)} boleto(s) ({resultado.deterioroPorcentaje}%).
+              En comparación con el pasado, tu capacidad de compra cambió en {Math.abs(resultado.deterioroVsAntes)} boleto(s) {resultado.deterioroVsAntes < 0 ? "menos" : "más"} ({resultado.deterioroPorcentaje}%).
             </div>
 
           </div>

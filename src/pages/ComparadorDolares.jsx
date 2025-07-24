@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { formatearMes, esFechaValida, limitesFecha } from "../utils/fechas";
 import Papa from "papaparse";
 
 export default function ComparadorDolares() {
@@ -7,6 +8,7 @@ export default function ComparadorDolares() {
   const [fechaCompra, setFechaCompra] = useState("2022-06");
   const [cantidadDolares, setCantidadDolares] = useState(100);
   const [resultado, setResultado] = useState(null);
+  const [errorFecha, setErrorFecha] = useState("");
 
   useEffect(() => {
     Papa.parse(import.meta.env.BASE_URL + "datasets/dolar_blue/dolar_blue_avg_mensual.csv", {
@@ -41,6 +43,13 @@ export default function ComparadorDolares() {
   const calcular = () => {
     const valorPasado = dolarData.find((d) => d.mes === fechaCompra)?.dolar;
     const valorActual = dolarData[dolarData.length - 1]?.dolar;
+
+    if (!esFechaValida(fechaCompra)) {
+      setErrorFecha("La fecha seleccionada está fuera del rango disponible (2009 a junio 2025).");
+      setResultado(null); 
+      return;
+    }
+    setErrorFecha("");
 
     const desdeIndex = inflacionData.findIndex((i) => i.mes === fechaCompra);
     const hastaIndex = inflacionData.length - 1;
@@ -93,10 +102,15 @@ export default function ComparadorDolares() {
           <label className="text-sm font-medium text-gray-700 mb-2 block">Mes de compra</label>
           <input
             type="month"
+            min={limitesFecha.min}
+            max={limitesFecha.max}
             value={fechaCompra}
             onChange={(e) => setFechaCompra(e.target.value)}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400"
           />
+          {errorFecha && (
+            <p className="text-red-600 text-sm mt-2 text-center sm:text-left">{errorFecha}</p>
+          )}
         </div>
         <div>
           <label className="text-sm font-medium text-gray-700 mb-2 block">Cantidad de dólares (USD)</label>
@@ -124,7 +138,7 @@ export default function ComparadorDolares() {
         <>
           <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-700">
             {[
-              { label: `📅 Dólar en ${fechaCompra}`, value: `$${resultado.valorPasado}` },
+              { label: `📅 Dólar en ${formatearMes(fechaCompra)}`, value: `$${resultado.valorPasado}` },
               { label: `📅 Dólar actual`, value: `$${resultado.valorActual} (${resultado.variacion}%)`, nowrap: true },
               { label: `💸 Inversión inicial en pesos`, value: `$${resultado.inversionPasada}` },
               { label: `💰 Valor actual de esos dólares`, value: `$${resultado.valorHoy}` },
@@ -134,7 +148,7 @@ export default function ComparadorDolares() {
                 color: resultado.gananciaPesos < 0 ? "text-red-600" : "text-green-600",
                 nowrap: true,
               },
-              { label: `📈 Inflación acumulada desde ${fechaCompra}`, value: `${resultado.inflacion}%` },
+              { label: `📈 Inflación acumulada desde ${formatearMes(fechaCompra)}`, value: `${resultado.inflacion}%` },
               { label: `🎯 Valor ajustado por inflación`, value: `$${resultado.inversionAjustada}` },
               {
                 label: `🧮 Diferencia respecto al ajuste`,

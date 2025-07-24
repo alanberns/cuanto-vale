@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Papa from "papaparse";
+import { formatearMes, esFechaValida, limitesFecha } from "../utils/fechas";
 
 export default function CalculadorPoderAdquisitivo() {
   const [inflacionMensual, setInflacionMensual] = useState([]);
@@ -7,6 +8,7 @@ export default function CalculadorPoderAdquisitivo() {
   const [sueldoBase, setSueldoBase] = useState(100000);
   const [sueldoActual, setSueldoActual] = useState(180000);
   const [resultado, setResultado] = useState(null);
+  const [errorFecha, setErrorFecha] = useState("");
 
   useEffect(() => {
     Papa.parse(import.meta.env.BASE_URL + "datasets/inflacion_mensual.csv", {
@@ -27,6 +29,13 @@ export default function CalculadorPoderAdquisitivo() {
   const calcular = () => {
     const desdeIndex = inflacionMensual.findIndex((m) => m.mes === fechaBase);
     const hastaIndex = inflacionMensual.length - 1;
+
+    if (!esFechaValida(fechaBase)) {
+      setErrorFecha("La fecha seleccionada está fuera del rango disponible (2009 a junio 2025).");
+      setResultado(null); 
+      return;
+    }
+    setErrorFecha("");
 
     if (desdeIndex === -1 || hastaIndex <= desdeIndex) return;
 
@@ -61,10 +70,15 @@ export default function CalculadorPoderAdquisitivo() {
           <label className="block text-sm font-medium text-gray-700 mb-2">Mes-año a comparar</label>
           <input
             type="month"
+            min={limitesFecha.min}
+            max={limitesFecha.max}
             value={fechaBase}
             onChange={(e) => setFechaBase(e.target.value)}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400"
           />
+          {errorFecha && (
+            <p className="text-red-600 text-sm mt-2 text-center sm:text-left">{errorFecha}</p>
+          )}
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Sueldo inicial ($)</label>
