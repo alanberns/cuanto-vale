@@ -13,6 +13,11 @@ export default function CalculadorBoletos() {
 
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+  
+
+  useEffect(() => {
     Papa.parse(import.meta.env.BASE_URL + "datasets/inflacion_mensual.csv", {
       download: true,
       header: true,
@@ -50,7 +55,7 @@ export default function CalculadorBoletos() {
 
     if (!esFechaValida(fechaBase)) {
       setErrorFecha("La fecha seleccionada está fuera del rango disponible (2009 a junio 2025).");
-      setResultado(null); 
+      setResultado(null);
       return;
     }
     setErrorFecha("");
@@ -79,9 +84,18 @@ export default function CalculadorBoletos() {
 
     setResultado({
       inflacion: (inflacionAcumulada * 100).toFixed(2),
-      sueldoAjustado: sueldoAjustado.toFixed(2),
-      boletoBase,
-      boletoActual,
+      sueldoAjustado: sueldoAjustado.toLocaleString('es-AR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }),
+      boletoBase: boletoBase.toLocaleString('es-AR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }),
+      boletoActual : boletoActual.toLocaleString('es-AR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }),
       boletosAntes: boletosAntes.toFixed(0),
       boletosEsperables: boletosEsperables.toFixed(0),
       boletosReales: boletosReales.toFixed(0),

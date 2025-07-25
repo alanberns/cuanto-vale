@@ -10,6 +10,12 @@ export default function ComparadorDolares() {
   const [resultado, setResultado] = useState(null);
   const [errorFecha, setErrorFecha] = useState("");
 
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  
   useEffect(() => {
     Papa.parse(import.meta.env.BASE_URL + "datasets/dolar_blue/dolar_blue_avg_mensual.csv", {
       download: true,
@@ -73,15 +79,36 @@ export default function ComparadorDolares() {
     const variacion = ((valorActual - valorPasado) / valorPasado * 100).toFixed(2);
 
     setResultado({
-      valorPasado,
-      valorActual,
-      inversionPasada: inversionPasada.toFixed(2),
-      valorHoy: valorHoy.toFixed(2),
-      gananciaPesos: gananciaPesos.toFixed(2),
+      valorPasado: valorPasado.toLocaleString('es-AR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }),
+      valorActual: valorActual.toLocaleString('es-AR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }),
+      inversionPasada: inversionPasada.toLocaleString('es-AR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }),
+      valorHoy: valorHoy.toLocaleString('es-AR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }),
+      gananciaPesos: gananciaPesos.toLocaleString('es-AR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }),
       gananciaPorcentaje,
       inflacion: (inflacionAcumulada * 100).toFixed(2),
-      inversionAjustada: inversionAjustada.toFixed(2),
-      diferencialVsInflacion: diferencialVsInflacion.toFixed(2),
+      inversionAjustada: inversionAjustada.toLocaleString('es-AR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }),
+      diferencialVsInflacion: diferencialVsInflacion.toLocaleString('es-AR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }),
       diferencialPorcentaje,
       variacion,
     });

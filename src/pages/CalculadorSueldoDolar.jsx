@@ -11,6 +11,10 @@ export default function CalculadorSueldoDolar() {
   const [errorFecha, setErrorFecha] = useState("");
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+  
+  useEffect(() => {
     Papa.parse(import.meta.env.BASE_URL + "datasets/dolar_blue/dolar_blue_avg_mensual.csv", {
       download: true,
       header: true,
@@ -71,9 +75,18 @@ export default function CalculadorSueldoDolar() {
       valorBase,
       valorActual,
       inflacion: (inflacionAcumulada * 100).toFixed(2),
-      sueldoReducido: sueldoReducido.toFixed(2),
-      sueldoDolarHistorico: sueldoDolarHistorico.toFixed(2),
-      sueldoDolarActual: sueldoDolarActual.toFixed(2),
+      sueldoReducido: sueldoReducido.toLocaleString('es-AR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }),
+      sueldoDolarHistorico: sueldoDolarHistorico.toLocaleString('es-AR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }),
+      sueldoDolarActual: sueldoDolarActual.toLocaleString('es-AR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }),
       diferencia: diferencia.toFixed(2),
       diferenciaPorcentaje,
     });

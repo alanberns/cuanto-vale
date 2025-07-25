@@ -10,7 +10,11 @@ export default function ComparadorSueldoDolarSimple() {
   const [sueldoActual, setSueldoActual] = useState(900000);
   const [resultado, setResultado] = useState(null);
   const [errorFecha, setErrorFecha] = useState("");
-
+  
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+  
   useEffect(() => {
     Papa.parse(import.meta.env.BASE_URL + "datasets/dolar_blue/dolar_blue_avg_mensual.csv", {
       download: true,
@@ -44,10 +48,22 @@ export default function ComparadorSueldoDolarSimple() {
     const diferenciaPorcentaje = ((sueldoDolarActual / sueldoDolarBase - 1) * 100).toFixed(2);
 
     setResultado({
-      valorBase,
-      valorActual,
-      sueldoDolarBase: sueldoDolarBase.toFixed(2),
-      sueldoDolarActual: sueldoDolarActual.toFixed(2),
+      valorBase: valorBase.toLocaleString('es-AR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }),
+      valorActual: valorActual.toLocaleString('es-AR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }),
+      sueldoDolarBase: sueldoDolarBase.toLocaleString('es-AR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }),
+      sueldoDolarActual: sueldoDolarActual.toLocaleString('es-AR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }),
       diferencia: diferencia.toFixed(2),
       diferenciaPorcentaje,
     });

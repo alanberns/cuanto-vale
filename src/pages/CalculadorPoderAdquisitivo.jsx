@@ -10,6 +10,12 @@ export default function CalculadorPoderAdquisitivo() {
   const [resultado, setResultado] = useState(null);
   const [errorFecha, setErrorFecha] = useState("");
 
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  
   useEffect(() => {
     Papa.parse(import.meta.env.BASE_URL + "datasets/inflacion_mensual.csv", {
       download: true,
@@ -32,7 +38,7 @@ export default function CalculadorPoderAdquisitivo() {
 
     if (!esFechaValida(fechaBase)) {
       setErrorFecha("La fecha seleccionada está fuera del rango disponible (2009 a junio 2025).");
-      setResultado(null); 
+      setResultado(null);
       return;
     }
     setErrorFecha("");
@@ -51,7 +57,10 @@ export default function CalculadorPoderAdquisitivo() {
     setResultado({
       inflacionAcumulada: (inflacionAcumulada * 100).toFixed(2),
       crecimientoSueldo: crecimientoSueldo.toFixed(2),
-      sueldoAjustado: sueldoAjustado.toFixed(2),
+      sueldoAjustado: sueldoAjustado.toLocaleString('es-AR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }),
       diferencia: diferencia.toFixed(2),
     });
   };

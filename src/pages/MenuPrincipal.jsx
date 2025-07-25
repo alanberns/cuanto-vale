@@ -1,4 +1,10 @@
+import { useEffect } from "react";
+
 export default function MenuPrincipal({ onSelect }) {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   const secciones = [
     {
       id: "boletos",
